@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "236904332209",
+    "project_id": "my-first-project-487de",
+    "storage_bucket": "my-first-project-487de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236904332209:android:eaf04c1fe300d885d91b90",
+        "android_client_info": {
+          "package_name": "algonquin.cst2335.greenbusmusicapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236904332209-2pr74nsle14ri5qf4m4rgkvusi3174of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_PpvpFQzldOjlLd7mtP7ZaaLauvJAw6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236904332209-2pr74nsle14ri5qf4m4rgkvusi3174of.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

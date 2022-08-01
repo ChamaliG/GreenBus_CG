@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">GreenBusMusicApp</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email: </string>
+    <string name="prompt_password">Password: </string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register</string>
+    <string name="welcome">Welcome!</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_main_page">MainPage</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="prompt_username">Username: </string>
+    <string name="register_prompt">Please input your information to register a new account:</string>
+    <string name="no_songs">You have no added songs. Please click the upload button to add to your playlist.</string>
+    <string name="upload_song">Choose Song File</string>
+    <string name="no_file">No file selected</string>
+    <string name="upload_art">Choose Cover Art File</string>
+    <string name="slogan">You have arrived at your destination...</string>
+    <string name="create_account"> <u>Create new account</u></string>
+
+</resources>
