@@ -10,6 +10,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Comparator;
+
 public class Song {
     private String title;
     private String album;
@@ -19,6 +21,7 @@ public class Song {
     private String artRefString;
     private String owner;
     private String artLink;
+    public static String sortType;
 
     public Song(){}
 
@@ -79,6 +82,10 @@ public class Song {
         this.album = album;
     }
 
+    //public String getSortType() { return sortType; }
+
+    //public void setSortType(String sortType){this.sortType=sortType;}
+
     @Exclude
     public String getKey() {
         return key;
@@ -107,4 +114,42 @@ public class Song {
 
     }
 
+    public static Comparator<Song> SongTitleComparator = new Comparator<Song>() {
+
+        public int compare(Song s1, Song s2) {
+            String Song1 = s1.getTitle().toUpperCase();
+            String Song2 = s2.getTitle().toUpperCase();
+
+            Song song = new Song();
+            if (song.sortType=="Des"){
+                //Descending order
+                return Song2.compareTo(Song1);
+            }else{
+                //Ascending order
+                return Song1.compareTo(Song2);
+            }
+        }
+    };
+
+    public static Comparator<Song> SongAlbumComparator = new Comparator<Song>() {
+
+        public int compare(Song s1, Song s2) {
+            String Album1 = s1.getAlbum().toUpperCase();
+            String Album2 = s2.getAlbum().toUpperCase();
+
+            Song song = new Song();
+            if (song.sortType=="Des"){
+                //Descending order
+                return Album2.compareTo(Album1);
+            }else{
+                //Ascending order
+                return Album1.compareTo(Album2);
+            }
+        }
+    };
+
+    public static String setSortType(String sortType1){
+        sortType = sortType1;
+        return sortType;
+    }
 }

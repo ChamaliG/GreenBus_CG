@@ -59,7 +59,8 @@
         android:background="@color/green_bright"
         android:text="sort"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="sortpopup"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/upload_btn"

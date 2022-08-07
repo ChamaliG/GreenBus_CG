@@ -3,14 +3,15 @@ package algonquin.cst2335.greenbusmusicapp;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,13 +22,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -38,10 +37,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class PlaylistActivity extends AppCompatActivity {
+public class PlaylistActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     RecyclerView playlist;
     FloatingActionButton upload_btn;
+    Button sort_btn;
     ArrayList<Song> songs;
     SongAdapter adt;
     ValueEventListener listener;
@@ -52,6 +53,7 @@ public class PlaylistActivity extends AppCompatActivity {
     int positionOfPlayingSong;
 
     MediaPlayer mediaPlayer;
+
 
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
@@ -85,10 +87,12 @@ public class PlaylistActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_playlist);
         playlist = findViewById(R.id.recyclerView);
 
         upload_btn = findViewById(R.id.upload_btn);
+        sort_btn = findViewById(R.id.xv);
 
         songs = new ArrayList<>();
         adt = new SongAdapter();
@@ -104,6 +108,8 @@ public class PlaylistActivity extends AppCompatActivity {
 
         upload_btn.setOnClickListener(click -> startActivity(new Intent( PlaylistActivity.this, UploadActivity.class))
         );
+
+        //sort_btn.setOnClickListener(click -> Sort_Songs());
 
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         songsByUser = FirebaseDatabase.getInstance().getReference("songs").orderByChild("owner").equalTo(currentUser);
@@ -133,11 +139,59 @@ public class PlaylistActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    public void Sort_Songs(String sortField, String sortType){
+        playlist = findViewById(R.id.recyclerView);
+        adt = new SongAdapter();
 
+        playlist.setAdapter(adt);
+        playlist.setLayoutManager(new LinearLayoutManager(this));
+
+        Song.setSortType(sortType);
+        if (sortField=="Title"){
+            Collections.sort(songs,Song.SongTitleComparator);
+        }else{
+            Collections.sort(songs,Song.SongAlbumComparator);
+        }
+
+        adt.notifyItemChanged(songs.size()-1);
+
+    }
+//---Added code for sort button pop up
+    public void sortpopup(View v){
+        PopupMenu popup = new PopupMenu(this,v);
+        popup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) this);
+        popup.inflate(R.menu.sort_options);
+        popup.show();
     }
 
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch ((item.getItemId())){
+            case R.id.az:
+                Sort_Songs("Title","Asc");
+                Toast.makeText(this,"Title - Sort By Ascending", Toast.LENGTH_SHORT).show();
+                return  true;
+            case R.id.za:
+                Sort_Songs("Title","Des");
+                Toast.makeText(this,"Title - Sort By Descending", Toast.LENGTH_SHORT).show();
+                return  true;
+
+            case R.id.azalb:
+                Sort_Songs("Album","Asc");
+                Toast.makeText(this,"Album - Sort By Ascending", Toast.LENGTH_SHORT).show();
+                return  true;
+            case R.id.zaalb:
+                Sort_Songs("Album","Des");
+                Toast.makeText(this,"Album - Sort By Descending", Toast.LENGTH_SHORT).show();
+                return  true;
+            default:
+                return  false;
+        }
+    }
+//----End of sort pop up
     private class SongView extends RecyclerView.ViewHolder{
 
         TextView title_txt;
