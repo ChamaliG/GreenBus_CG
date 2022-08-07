@@ -16,4 +16,12 @@
         android:id="@+id/zaalb"
         android:title="Album Z-A"
         />
+    <item
+        android:id="@+id/azupt"
+        android:title="Upload Time A-Z"
+        />
+    <item
+        android:id="@+id/zaupt"
+        android:title="Upload Time Z-A"
+        />
 </menu>

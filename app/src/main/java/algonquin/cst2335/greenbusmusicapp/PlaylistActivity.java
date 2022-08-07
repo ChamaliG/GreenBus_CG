@@ -149,12 +149,13 @@ public class PlaylistActivity extends AppCompatActivity implements PopupMenu.OnM
         playlist.setLayoutManager(new LinearLayoutManager(this));
 
         Song.setSortType(sortType);
-        if (sortField=="Title"){
+        if (sortField.equals("Title")){
             Collections.sort(songs,Song.SongTitleComparator);
-        }else{
+        }else if (sortField.equals("Album") ) {
             Collections.sort(songs,Song.SongAlbumComparator);
+        }else {
+            Collections.sort(songs, Song.SongUploadTimeComparator);
         }
-
         adt.notifyItemChanged(songs.size()-1);
 
     }
@@ -186,6 +187,14 @@ public class PlaylistActivity extends AppCompatActivity implements PopupMenu.OnM
             case R.id.zaalb:
                 Sort_Songs("Album","Des");
                 Toast.makeText(this,"Album - Sort By Descending", Toast.LENGTH_SHORT).show();
+                return  true;
+            case R.id.azupt:
+                Sort_Songs("UploadTime","Asc");
+                Toast.makeText(this,"Upload Time - Most Recent", Toast.LENGTH_SHORT).show();
+                return  true;
+            case R.id.zaupt:
+                Sort_Songs("UploadTime","Des");
+                Toast.makeText(this,"Album - Least Recent", Toast.LENGTH_SHORT).show();
                 return  true;
             default:
                 return  false;

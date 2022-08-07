@@ -35,7 +35,7 @@ public class Song {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Song(String title, String album, String audioLink, String artRef, String artLink ,String owner ) {
+    public Song(String title, String album, String audioLink, String artRef, String artLink , String owner, long uploadMillis ) {
         this.title = title;
         this.album = album;
         this.audioLink = audioLink;
@@ -173,6 +173,26 @@ public class Song {
             }
         }
     };
+
+
+    public static Comparator<Song> SongUploadTimeComparator = new Comparator<Song>() {
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        public int compare(Song s1, Song s2) {
+            LocalDateTime UTime1 = s1.getUploadTime();
+            LocalDateTime UTime2 = s2.getUploadTime();
+
+            Song song = new Song();
+            if (song.sortType=="Des"){
+                //Descending order
+                return UTime2.compareTo(UTime1);
+            }else{
+                //Ascending order
+                return UTime1.compareTo(UTime2);
+            }
+        }
+    };
+
 
     public static String setSortType(String sortType1){
         sortType = sortType1;
