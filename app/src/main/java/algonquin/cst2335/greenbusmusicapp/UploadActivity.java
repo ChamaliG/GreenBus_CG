@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -36,6 +38,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 
 public class UploadActivity extends AppCompatActivity {
@@ -98,6 +104,7 @@ public class UploadActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -203,6 +210,7 @@ public class UploadActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void uploadToFirebase() {
         String selectedSong = song_selected.getText().toString();
         String title_txt = title.getText().toString();
@@ -219,6 +227,7 @@ public class UploadActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void uploadSongObjectToDatabase() {
         String title_txt = title.getText().toString();
         String album_txt = album.getText().toString();
@@ -229,8 +238,8 @@ public class UploadActivity extends AppCompatActivity {
             pd.setTitle("Uploading...");
             pd.setMessage("Please wait as your song is uploaded.");
             pd.show();
-
-            StorageReference songRef = songsStorageRef.child(title_txt+ "_" + System.currentTimeMillis() + "." + getFileExtension(audioUri));
+            long currentTime = System.currentTimeMillis();
+            StorageReference songRef = songsStorageRef.child(title_txt+ "_" + currentTime + "." + getFileExtension(audioUri));
             StorageMetadata metadata = new StorageMetadata.Builder()
                     .setCustomMetadata("name", title_txt).setCustomMetadata("Uploaded by", currentUser)
                     .build();
@@ -250,7 +259,7 @@ public class UploadActivity extends AppCompatActivity {
             uploadTask = songRef.putFile(audioUri, metadata).addOnSuccessListener(taskSnapshot -> {
                 songRef.getDownloadUrl().addOnSuccessListener(uri -> {
 
-                    Song song = new Song(title_txt, album_txt, uri.toString(), art_ref, art_link, currentUser);
+                    Song song = new Song(title_txt, album_txt, uri.toString(), art_ref, art_link, currentUser, currentTime);
 
                     String uploadId = db.push().getKey();
                     song.setKey(uploadId);

@@ -1,6 +1,9 @@
 package algonquin.cst2335.greenbusmusicapp;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -10,6 +13,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Comparator;
 
 public class Song {
@@ -21,10 +27,14 @@ public class Song {
     private String artRefString;
     private String owner;
     private String artLink;
+    private LocalDateTime uploadTime;
+    private long uploadMillis;
     public static String sortType;
 
     public Song(){}
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Song(String title, String album, String audioLink, String artRef, String artLink ,String owner ) {
         this.title = title;
         this.album = album;
@@ -32,6 +42,26 @@ public class Song {
         this.owner = owner;
         this.artRefString = artRef;
         this.artLink = artLink;
+        this.uploadMillis = uploadMillis;
+        this.uploadTime = millsToLocalDateTime(uploadMillis);
+    }
+
+    public long getUploadMillis() {
+        return uploadMillis;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setUploadMillis(long uploadMillis) {
+        this.uploadMillis = uploadMillis;
+        this.uploadTime = millsToLocalDateTime(uploadMillis);
+    }
+    @Exclude
+    public LocalDateTime getUploadTime() {
+        return uploadTime;
+    }
+    @Exclude
+    public void setUploadTime(LocalDateTime uploadTime) {
+        this.uploadTime = uploadTime;
     }
 
     public String getArtLink() {
@@ -81,10 +111,6 @@ public class Song {
     public void setAlbum(String album) {
         this.album = album;
     }
-
-    //public String getSortType() { return sortType; }
-
-    //public void setSortType(String sortType){this.sortType=sortType;}
 
     @Exclude
     public String getKey() {
@@ -151,5 +177,12 @@ public class Song {
     public static String setSortType(String sortType1){
         sortType = sortType1;
         return sortType;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private LocalDateTime millsToLocalDateTime(long millis) {
+        Instant instant = Instant.ofEpochMilli(millis);
+        LocalDateTime date = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return date;
     }
 }
